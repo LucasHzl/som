@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\TickerLogRepository;
+use App\Repository\TicketLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TickerLogRepository::class)]
-class TickerLog
+#[ORM\Entity(repositoryClass: TicketLogRepository::class)]
+class TicketLog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

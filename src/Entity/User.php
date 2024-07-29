@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -42,6 +44,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?array $skills = null;
+
+    /**
+     * @var Collection<int, Role>
+     */
+    #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'user')]
+    private Collection $relation_user_role;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
+    private Collection $relation_user_ticket;
+
+    public function __construct()
+    {
+        $this->relation_user_role = new ArrayCollection();
+        $this->relation_user_ticket = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,6 +182,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSkills(?array $skills): static
     {
         $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Role>
+     */
+    public function getRelationUserRole(): Collection
+    {
+        return $this->relation_user_role;
+    }
+
+    public function addRelationUserRole(Role $relationUserRole): static
+    {
+        if (!$this->relation_user_role->contains($relationUserRole)) {
+            $this->relation_user_role->add($relationUserRole);
+        }
+
+        return $this;
+    }
+
+    public function removeRelationUserRole(Role $relationUserRole): static
+    {
+        $this->relation_user_role->removeElement($relationUserRole);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getRelationUserTicket(): Collection
+    {
+        return $this->relation_user_ticket;
+    }
+
+    public function addRelationUserTicket(Ticket $relationUserTicket): static
+    {
+        if (!$this->relation_user_ticket->contains($relationUserTicket)) {
+            $this->relation_user_ticket->add($relationUserTicket);
+            $relationUserTicket->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelationUserTicket(Ticket $relationUserTicket): static
+    {
+        if ($this->relation_user_ticket->removeElement($relationUserTicket)) {
+            // set the owning side to null (unless already changed)
+            if ($relationUserTicket->getUser() === $this) {
+                $relationUserTicket->setUser(null);
+            }
+        }
 
         return $this;
     }

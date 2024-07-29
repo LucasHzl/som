@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
@@ -36,6 +38,20 @@ class Customer
 
     #[ORM\Column(length: 10)]
     private ?string $phone = null;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'customer')]
+    private Collection $relation_customer_ticket;
+
+    #[ORM\ManyToOne(inversedBy: 'relation_role_customer')]
+    private ?Role $role = null;
+
+    public function __construct()
+    {
+        $this->relation_customer_ticket = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,6 +150,48 @@ class Customer
     public function setPhone(string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getRelationCustomerTicket(): Collection
+    {
+        return $this->relation_customer_ticket;
+    }
+
+    public function addRelationCustomerTicket(Ticket $relationCustomerTicket): static
+    {
+        if (!$this->relation_customer_ticket->contains($relationCustomerTicket)) {
+            $this->relation_customer_ticket->add($relationCustomerTicket);
+            $relationCustomerTicket->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelationCustomerTicket(Ticket $relationCustomerTicket): static
+    {
+        if ($this->relation_customer_ticket->removeElement($relationCustomerTicket)) {
+            // set the owning side to null (unless already changed)
+            if ($relationCustomerTicket->getCustomer() === $this) {
+                $relationCustomerTicket->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }
