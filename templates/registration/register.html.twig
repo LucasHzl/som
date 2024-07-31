@@ -4,23 +4,56 @@
 
 {% block body %}
     {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        <div class="alert alert-danger" role="alert">
+            {{ flash_error }}
+        </div>
     {% endfor %}
 
     <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
-
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.first_name) }}
-        {{ form_row(registrationForm.last_name) }}
-        {{ form_row(registrationForm.phone) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
+        <div>
+            {{ form_label(registrationForm.email) }}
+            {{ form_widget(registrationForm.email) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+        <div>
+            {{ form_label(registrationForm.first_name) }}
+            {{ form_widget(registrationForm.first_name) }}
+            {{ form_errors(registrationForm.first_name) }}
+        </div>
+        <div>
+            {{ form_label(registrationForm.last_name) }}
+            {{ form_widget(registrationForm.last_name) }}
+            {{ form_errors(registrationForm.last_name) }}
+        </div>
+        <div>
+            {{ form_label(registrationForm.phone) }}
+            {{ form_widget(registrationForm.phone) }}
+            {{ form_errors(registrationForm.phone) }}
+        </div>
+        <div>
+            {{ form_label(registrationForm.plainPassword, 'Password') }}
+            {{ form_widget(registrationForm.plainPassword) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+        <div>
+            {{ form_widget(registrationForm.agreeTerms) }}
+            {{ form_label(registrationForm.agreeTerms) }}
+            {{ form_errors(registrationForm.agreeTerms) }}
+        </div>
+        <div>
+            {{ form_label(registrationForm.roles, 'Roles') }}
+            <div>
+                {% for choice in registrationForm.roles %}
+                    <div>
+                        {{ form_widget(choice) }}
+                        {{ form_label(choice) }}
+                    </div>
+                {% endfor %}
+            </div>
+            {{ form_errors(registrationForm.roles) }}
+        </div>
+        <button type="submit">Register</button>
     {{ form_end(registrationForm) }}
 {% endblock %}
