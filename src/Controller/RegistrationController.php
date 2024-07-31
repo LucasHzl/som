@@ -48,7 +48,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('system@exohsi.dev', 'Support Exohsi'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Comfirmez votre email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
