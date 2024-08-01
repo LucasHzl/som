@@ -47,11 +47,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?array $skills = null;
 
-    /**
-     * @var Collection<int, Role>
-     */
-    #[ORM\ManyToMany(targetEntity: Role::class, inversedBy: 'user')]
-    private Collection $relation_user_role;
 
     /**
      * @var Collection<int, Ticket>
@@ -64,7 +59,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->relation_user_role = new ArrayCollection();
         $this->relation_user_ticket = new ArrayCollection();
     }
 
@@ -191,29 +185,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Role>
-     */
-    public function getRelationUserRole(): Collection
-    {
-        return $this->relation_user_role;
-    }
-
-    public function addRelationUserRole(Role $relationUserRole): static
-    {
-        if (!$this->relation_user_role->contains($relationUserRole)) {
-            $this->relation_user_role->add($relationUserRole);
-        }
-
-        return $this;
-    }
-
-    public function removeRelationUserRole(Role $relationUserRole): static
-    {
-        $this->relation_user_role->removeElement($relationUserRole);
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Ticket>

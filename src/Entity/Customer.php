@@ -45,8 +45,6 @@ class Customer
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'customer')]
     private Collection $relation_customer_ticket;
 
-    #[ORM\ManyToOne(inversedBy: 'relation_role_customer')]
-    private ?Role $role = null;
 
     public function __construct()
     {
@@ -184,15 +182,4 @@ class Customer
         return $this;
     }
 
-    public function getRole(): ?Role
-    {
-        return $this->role;
-    }
-
-    public function setRole(?Role $role): static
-    {
-        $this->role = $role;
-
-        return $this;
-    }
 }
