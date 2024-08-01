@@ -45,6 +45,9 @@ class Customer
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'customer')]
     private Collection $relation_customer_ticket;
 
+    #[ORM\Column]
+    private array $roles = [];
+
 
     public function __construct()
     {
@@ -178,6 +181,18 @@ class Customer
                 $relationCustomerTicket->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }
